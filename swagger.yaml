@@ -1,0 +1,3435 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: http://localhost:5000/api/
+info:
+  version: "1.0.0"
+  title: EShop
+  description: SoftUni project
+paths:
+  /user/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      description: API to register new users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                  example: John
+                lastname:
+                  type: string
+                  example: Doe
+                email:
+                  type: string
+                  format: email
+                  example: johndoe@example.com
+                  description: The email address of the user
+                mobile:
+                  type: string
+                  example: "+1234567890"
+                  description: The mobile number of the user
+                password:
+                  type: string
+                  example: "password123"
+                  description: The password of the user
+      responses:
+        '200':
+          description: Created - User successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: "6686b7e3f5be4cf9a824fe51"
+                  firstname:
+                    type: string
+                    example: John
+                  lastname:
+                    type: string
+                    example: Doe
+                  email:
+                    type: string
+                    format: email
+                    example: johndoe@example.com
+                  mobile:
+                    type: string
+                    example: "+1234567890"
+                  password:
+                    type: string
+                    example: "$2b$10$ZRxN4KPxuF.2BPtfPCIJ4OIpADvF860dohIpCxU5/lwvTT4ZmMDp2"
+                  role:
+                    type: string
+                    enum:
+                      - user
+                      - admin
+                    example: user
+                  isBlocked:
+                    type: boolean
+                    example: false
+                  cart:
+                    type: array
+                    items:
+                      type: string
+                    example: []
+                  wishlist:
+                    type: array
+                    items:
+                      type: string
+                    example: []
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2024-07-04T14:55:31.970Z"
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: "2024-07-04T14:55:31.970Z"
+                  __v:
+                    type: integer
+                    example: 0
+        '400':
+          description: Bad Request - Invalid request body or user already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User Already Exists
+  /user/login:
+    post:
+      tags:
+        - Auth
+      summary: Login user
+      description: API to authenticate and login users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: johndoe@example.com
+                  description: The email address of the user
+                password:
+                  type: string
+                  example: "password123"
+                  description: The password of the user
+      responses:
+        '200':
+          description: OK - User successfully authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 5ffcb9f84c9c1044dcf65f2a
+                  firstname:
+                    type: string
+                    example: John
+                  lastname:
+                    type: string
+                    example: Doe
+                  email:
+                    type: string
+                    format: email
+                    example: johndoe@example.com
+                  mobile:
+                    type: string
+                    example: "+1234567890"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsIn..."
+                    description: JWT token for authenticated user
+        '401':
+          description: Unauthorized - Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid Credentials
+  /user/forgot-password-token:
+    post:
+        tags:
+          - Auth
+        summary: Send password reset token
+        description: API to send password reset token to user's email
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    example: johndoe@example.com
+                    description: The email address of the user
+        responses:
+          '200':
+            description: OK - Password reset token sent successfully
+            content:
+              application/json:
+                schema:
+                  type: string
+                  example: "3c6c30d0-e30d-11ea-adc1-0242ac120002"
+          '400':
+            description: Bad Request - Invalid request or user not found
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: User not found with this email
+        security: []                       
+  /user/reset-password/{token}:
+    put:
+      tags:
+          - Auth
+      summary: Reset user password
+      description: API to reset user's password using a reset token
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema:
+            type: string
+          description: The token received in the email for resetting password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: "newPassword123"
+                  description: The new password for the user account
+      responses:
+        '200':
+          description: OK - Password successfully reset
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: "6686b7e3f5be4cf9a824fe51"
+                  firstname:
+                    type: string
+                    example: John
+                  lastname:
+                    type: string
+                    example: Doe
+                  email:
+                    type: string
+                    format: email
+                    example: johndoe@example.com
+                  mobile:
+                    type: string
+                    example: "+1234567890"
+                  password:
+                    type: string
+                    example: "$2b$10$ZRxN4KPxuF.2BPtfPCIJ4OIpADvF860dohIpCxU5/lwvTT4ZmMDp2"
+                  role:
+                    type: string
+                    enum:
+                      - user
+                      - admin
+                    example: user
+                  isBlocked:
+                    type: boolean
+                    example: false
+                  cart:
+                    type: array
+                    items:
+                      type: string
+                    example: []
+                  wishlist:
+                    type: array
+                    items:
+                      type: string
+                    example: []
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2024-07-04T14:55:31.970Z"
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: "2024-07-04T14:55:31.970Z"
+                  __v:
+                    type: integer
+                    example: 0
+        '500':
+          description: Internal Server Error - Token Expired, Please try again later
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token Expired, Please try again later
+      security: []  
+  /user/password:
+    put:
+      tags:
+          - Auth
+      summary: Update user password. Requires user login
+      description: API to update user's password
+      tags:
+        - Password
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: "newPassword123"
+                  description: The new password for the user account
+      responses:
+        '200':
+          description: OK - Password successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '500':
+          description: Internal Server Error - There is no token attached to header
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: There is no token attached to header
+  /user/admin-login:
+    post:
+      tags:
+          - Auth
+      summary: Authenticate admin user
+      description: API for admin user authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: admin@gmail.com
+                  description: The email address of the admin user
+                password:
+                  type: string
+                  example: admin@gmail.com
+                  description: The password of the admin user
+      responses:
+        '200':
+          description: OK - Admin login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request - Invalid credentials or missing fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid Credentials
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Cannot read properties of null (reading 'role')
+      security: []
+  /user/cart:
+    get:
+      summary: Get User Cart. Requires user login
+      description: API for retrieving user's cart
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns user's cart with populated product details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: Cart ID
+                  products:
+                    $ref: '#/components/schemas/Product'
+                  cartTotal:
+                    type: number
+                    description: Total cost of items in the cart
+                  totalAfterDiscount:
+                    type: number
+                    description: Total cost after applying discounts (if any)
+                  orderby:
+                    type: string
+                    description: User ID who owns the cart
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '500':
+          description: Internal Server Error - Something went wrong
+    post:
+      tags:
+          - Auth
+      summary: Add or update user's shopping cart. Requires user login
+      description: API for managing user shopping cart
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cart:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: 5ffcb9f84c9c1044dcf65f2a
+                        description: The ID of the product being added to the cart
+                      count:
+                        type: integer
+                        example: 2
+                        description: The quantity of the product being added
+                      color:
+                        type: string
+                        example: "#ff0000"
+                        description: The color of the product being added
+      responses:
+        '200':
+          description: OK - Cart updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 5ffcb9f84c9c1044dcf65f2a
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: string
+                          example: 5ffcb9f84c9c1044dcf65f2a
+                          description: The ID of the product in the cart
+                        count:
+                          type: integer
+                          example: 2
+                          description: The quantity of the product in the cart
+                        color:
+                          type: string
+                          example: "#ff0000"
+                          description: The color of the product in the cart
+                        price:
+                          type: number
+                          example: 50
+                          description: The price of the product in the cart
+                  cartTotal:
+                    type: number
+                    example: 100
+                    description: The total price of the cart
+                  orderby:
+                    type: string
+                    example: 5ffcb9f84c9c1044dcf65f2a
+                    description: The ID of the user who owns the cart
+        '400':
+          description: Bad Request - Invalid request or user ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid user ID
+        '401':
+          description: Unauthorized - Authentication token is missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Authorized token expired, Please Login again
+      security:
+        - bearerAuth: []
+  /user/cart/applycoupon:
+    post:
+      summary: Apply coupon to user's shopping cart. Requires user login
+      description: API for applying a coupon to a user's shopping cart
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                coupon:
+                  type: string
+                  example: SUMMER2024
+                  description: The coupon code to apply
+      responses:
+        '200':
+          description: OK - Coupon applied successfully
+          content:
+            application/json:
+              schema:
+                type: number
+                example: 90.50
+                description: The total amount after applying the coupon discount
+        '400':
+          description: Bad Request - Invalid coupon code or user ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid Coupon
+        '401':
+          description: Unauthorized - Authentication token is missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Authorized token expired, Please Login again
+      security:
+        - bearerAuth: []
+  /user/cart/cash-order:
+    post:
+      summary: Create a cash-on-delivery order. Requires user login
+      description: API for creating a cash-on-delivery order
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                COD:
+                  type: boolean
+                  example: true
+                  description: Flag indicating whether it's a cash-on-delivery order
+                couponApplied:
+                  type: boolean
+                  example: true
+                  description: Flag indicating whether a coupon is applied
+      responses:
+        '200':
+          description: OK - Order created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                    description: Indicates the success message
+        '400':
+          description: Bad Request - Error occurred during order creation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create cash order failed
+                    description: Indicates the failure message
+        '401':
+          description: Unauthorized - Authentication token is missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Authorized token expired, Please Login again
+      security:
+        - bearerAuth: []
+  /user/all-users:
+    get:
+      summary: Retrieve all users with wishlist information
+      description: API for retrieving all users with their wishlist
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK - Returns an array of all users with wishlist populated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized - Authentication token is missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Authorized token expired, Please Login again
+      security:
+        - bearerAuth: []
+  /user/get-orders:
+    get:
+      summary: Retrieve orders of the logged-in user. Requires user login
+      description: API for retrieving orders of a logged-in user
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK - Returns orders of the logged-in user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          description: Unauthorized - Authentication token is missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Authorized token expired, Please Login again
+      security:
+        - bearerAuth: []
+  /user/getallorders:
+    get:
+      summary: Retrieve all orders. Requires admin login
+      description: API for retrieving all orders (admin access required)
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK - Returns all orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '401':
+          description: Unauthorized - Authentication token is missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Authorized token expired, Please Login again
+        '403':
+          description: Forbidden - User does not have admin rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You are not an admin
+  /user/getorderbyuser/{id}:
+    get:
+      summary: Retrieve orders by user ID. Requires admin login
+      description: API for retrieving orders by user ID (admin access required)
+      tags:
+        - Auth
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the user whose orders are to be retrieved
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK - Returns orders for the specified user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          description: Unauthorized - Authentication token is missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Authorized token expired, Please Login again
+        '403':
+          description: Forbidden - User does not have admin rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You are not an admin
+        '404':
+          description: Not Found - This id is not valid or not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: This id is not valid or not Found
+  /user/refresh:
+    get:
+      summary: Refresh Access Token
+      description: API for refreshing access token using refresh token stored in cookies
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: OK - Returns a new access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    description: New access token
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '401':
+          description: Unauthorized - No refresh token found in cookies or invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: No Refresh Token in Cookies or Invalid Token
+        '403':
+          description: Forbidden - Refresh token present in cookies but not found or not matched in database
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: No Refresh token present in DB or not matched
+        '500':
+          description: Internal Server Error - Something went wrong with token verification
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: There is something wrong with refresh token
+  /user/logout:
+    get:
+      summary: Logout User
+      description: API for logging out users and clearing refresh token from cookies
+      tags:
+        - Auth
+      responses:
+        '204':
+          description: No Content - Successfully logged out
+        '401':
+          description: Unauthorized - No refresh token found in cookies
+        '403':
+          description: Forbidden - Refresh token present in cookies but user not found in database
+        '500':
+          description: Internal Server Error - No refresh token found in cookies
+  /user/wishlist:
+    get:
+      summary: Get User Wishlist. Requires user login
+      description: API for retrieving user's wishlist
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns user object with populated wishlist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: User ID
+                  firstname:
+                    type: string
+                    description: User's first name
+                  lastname:
+                    type: string
+                    description: User's last name
+                  email:
+                    type: string
+                    description: User's email
+                  mobile:
+                    type: string
+                    description: User's mobile number
+                  wishlist:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '500':
+          description: Internal Server Error - Something went wrong    
+  /user/{id}:
+    get:
+      summary: Get User by ID. Requires admin login
+      description: API for retrieving a user by ID
+      tags:
+        - Auth
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the user to retrieve
+          schema:
+            type: string
+          example: 60db9bcb6f6a15435c6d5d15
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns the requested user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: User ID
+                  firstname:
+                    type: string
+                    description: User's first name
+                  lastname:
+                    type: string
+                    description: User's last name
+                  email:
+                    type: string
+                    description: User's email address
+                  mobile:
+                    type: string
+                    description: User's mobile number
+                  role:
+                    type: string
+                    description: User's role
+                  isBlocked:
+                    type: boolean
+                    description: Indicates if the user is blocked
+                  cart:
+                    type: array
+                    items:
+                      type: object
+                      description: Product details in user's cart
+                      properties:
+                        product:
+                          $ref: '#/components/schemas/Product'
+                        count:
+                          type: integer
+                          description: Quantity of the product in the cart
+                        color:
+                          type: string
+                          description: Color of the product in the cart
+                  wishlist:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: Date and time when the user was created
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: Date and time when the user was last updated
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '404':
+          description: User not found - The provided user ID does not exist
+        '500':
+          description: Internal Server Error - Something went wrong
+    delete:
+      summary: Delete a User
+      description: API for managing users in the e-commerce system
+      tags:
+        - Auth
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID to delete
+      responses:
+        '200':
+          description: Successful operation - Returns the deleted user object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: "6686b7e3f5be4cf9a824fe51"
+                  firstname:
+                    type: string
+                    example: John
+                  lastname:
+                    type: string
+                    example: Doe
+                  email:
+                    type: string
+                    format: email
+                    example: johndoe@example.com
+                  mobile:
+                    type: string
+                    example: "+1234567890"
+                  password:
+                    type: string
+                    example: "$2b$10$ZRxN4KPxuF.2BPtfPCIJ4OIpADvF860dohIpCxU5/lwvTT4ZmMDp2"
+                  role:
+                    type: string
+                    enum:
+                      - user
+                      - admin
+                    example: user
+                  isBlocked:
+                    type: boolean
+                    example: false
+                  cart:
+                    type: array
+                    items:
+                      type: string
+                    example: []
+                  wishlist:
+                    type: array
+                    items:
+                      type: string
+                    example: []
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2024-07-04T14:55:31.970Z"
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: "2024-07-04T14:55:31.970Z"
+                  __v:
+                    type: integer
+                    example: 0
+        '404':
+          description: User not found - This id is not valid or not Found
+        '500':
+          description: Internal Server Error - Something went wrong
+  /user/empty-cart:
+    delete:
+      summary: Empty User's Cart. Requires user login
+      description: API for managing user's shopping cart
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns the emptied cart object
+          content:
+            application/json:
+              schema: null
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '500':
+          description: Internal Server Error - Something went wrong
+  /user/order/update-order/{id}:
+    put:
+      summary: Update Order Status. Requires admin login
+      description: API for managing orders in the e-commerce system
+      tags:
+        - Auth
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Order ID to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: string
+                  enum: ["Not Processed", "Cash on Delivery", "Processing", "Dispatched", "Cancelled", "Delivered"]
+                  description: New status for the order
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns the updated order object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: Order ID
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                              description: Product ID
+                            title:
+                              type: string
+                              description: Product title
+                        count:
+                          type: number
+                          description: Quantity of the product
+                        color:
+                          type: string
+                          description: Color of the product
+                  paymentIntent:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: Payment Intent ID
+                      method:
+                        type: string
+                        description: Payment method used
+                      amount:
+                        type: number
+                        description: Total amount of the order
+                      status:
+                        type: string
+                        description: Current status of the payment
+                      created:
+                        type: string
+                        format: date-time
+                        description: Date and time when the payment was created
+                      currency:
+                        type: string
+                        description: Currency of the payment
+                  orderby:
+                    type: string
+                    description: ID of the user who placed the order
+                  orderStatus:
+                    type: string
+                    description: Current status of the order
+                example:
+                  _id: 60db9bcb6f6a15435c6d5d15
+                  products:
+                    - product:
+                        _id: 60d9b7b3b1abf02e3c44f0ca
+                        title: Sample Product
+                      count: 2
+                      color: Red
+                  paymentIntent:
+                    id: uniqid123
+                    method: COD
+                    amount: 250
+                    status: Cash on Delivery
+                    created: 2024-07-03T12:00:00Z
+                    currency: usd
+                  orderby: 60db9bcb6f6a15435c6d5d16
+                  orderStatus: Processing
+        '400':
+          description: Bad Request - Invalid input or missing required fields
+        '401':
+          description: Unauthorized - You are not an admin
+        '500':
+          description: Internal Server Error - Something went wrong
+  /user/edit-user:
+    put:
+      summary: Update User Details. Requires user login
+      description: API for managing user details in the e-commerce system
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                  description: New first name of the user
+                  example: Tomy
+                lastname:
+                  type: string
+                  description: New last name of the user
+                  example: Willson
+                email:
+                  type: string
+                  format: email
+                  description: New email address of the user
+                  example: tomy123@example.mail
+                mobile:
+                  type: string
+                  description: New mobile number of the user
+                  example: +1234567890
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns the updated user object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: User ID
+                  firstname:
+                    type: string
+                    description: User's first name
+                  lastname:
+                    type: string
+                    description: User's last name
+                  email:
+                    type: string
+                    description: User's email address
+                  mobile:
+                    type: string
+                    description: User's mobile number
+                  role:
+                    type: string
+                    description: User's role (default is 'user')
+                  isBlocked:
+                    type: boolean
+                    description: Indicates if the user is blocked
+                  cart:
+                    type: array
+                    description: User's cart items
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: string
+                          description: ID of the product in the cart
+                        count:
+                          type: number
+                          description: Quantity of the product in the cart
+                        color:
+                          type: string
+                          description: Color of the product in the cart
+                  address:
+                    type: string
+                    description: User's address
+                  wishlist:
+                    type: array
+                    description: User's wishlist items
+                    items:
+                      type: string
+                      description: ID of the product in the wishlist
+                  refreshToken:
+                    type: string
+                    description: Refresh token for authentication
+                  passwordChangedAt:
+                    type: string
+                    format: date-time
+                    description: Date and time when password was last changed
+                  passwordResetToken:
+                    type: string
+                    description: Token for password reset
+                  passwordResetExpires:
+                    type: string
+                    format: date-time
+                    description: Expiry date for password reset token
+                example:
+                  _id: 60db9bcb6f6a15435c6d5d15
+                  firstname: John
+                  lastname: Doe
+                  email: johndoe@example.com
+                  mobile: +1234567890
+                  role: user
+                  isBlocked: false
+                  cart: []
+                  address: 123 Street, City
+                  wishlist: []
+                  refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  passwordChangedAt: 2024-07-03T12:00:00Z
+                  passwordResetToken: null
+                  passwordResetExpires: null
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '404':
+          description: Not Found - User not found
+        '500':
+          description: Internal Server Error - Something went wrong
+  /user/save-address:
+    put:
+      summary: Save User Address. Requires user login
+      description: API for managing user addresses in the e-commerce system
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  description: New address to save for the user
+                  example: 123 Updated Street, New City
+              required:
+                - address
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns the updated user object with saved address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: User ID
+                  firstname:
+                    type: string
+                    description: User's first name
+                  lastname:
+                    type: string
+                    description: User's last name
+                  email:
+                    type: string
+                    description: User's email address
+                  mobile:
+                    type: string
+                    description: User's mobile number
+                  role:
+                    type: string
+                    description: User's role (default is 'user')
+                  isBlocked:
+                    type: boolean
+                    description: Indicates if the user is blocked
+                  cart:
+                    type: array
+                    description: User's cart items
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: string
+                          description: ID of the product in the cart
+                        count:
+                          type: number
+                          description: Quantity of the product in the cart
+                        color:
+                          type: string
+                          description: Color of the product in the cart
+                  address:
+                    type: string
+                    description: User's address (updated)
+                  wishlist:
+                    type: array
+                    description: User's wishlist items
+                    items:
+                      type: string
+                      description: ID of the product in the wishlist
+                  refreshToken:
+                    type: string
+                    description: Refresh token for authentication
+                  passwordChangedAt:
+                    type: string
+                    format: date-time
+                    description: Date and time when password was last changed
+                  passwordResetToken:
+                    type: string
+                    description: Token for password reset
+                  passwordResetExpires:
+                    type: string
+                    format: date-time
+                    description: Expiry date for password reset token
+                example:
+                  _id: 60db9bcb6f6a15435c6d5d15
+                  firstname: John
+                  lastname: Doe
+                  email: johndoe@example.com
+                  mobile: +1234567890
+                  role: user
+                  isBlocked: false
+                  cart: []
+                  address: "123 Updated Street, New City"
+                  wishlist: []
+                  refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  passwordChangedAt: 2024-07-03T12:00:00Z
+                  passwordResetToken: null
+                  passwordResetExpires: null
+        '400':
+          description: Bad Request - Invalid input or missing required fields
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '500':
+          description: Internal Server Error - Something went wrong
+  /user/block-user/{userId}:
+    put:
+      summary: Block User. Requires admin login
+      description: API for managing user accounts in the e-commerce system
+      tags:
+        - Auth
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to block
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns the updated user object with blocked status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: User ID
+                  firstname:
+                    type: string
+                    description: User's first name
+                  lastname:
+                    type: string
+                    description: User's last name
+                  email:
+                    type: string
+                    description: User's email address
+                  mobile:
+                    type: string
+                    description: User's mobile number
+                  role:
+                    type: string
+                    description: User's role (default is 'user')
+                  isBlocked:
+                    type: boolean
+                    description: Indicates if the user is blocked (updated to true)
+                  cart:
+                    type: array
+                    description: User's cart items
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: string
+                          description: ID of the product in the cart
+                        count:
+                          type: number
+                          description: Quantity of the product in the cart
+                        color:
+                          type: string
+                          description: Color of the product in the cart
+                  address:
+                    type: string
+                    description: User's address
+                  wishlist:
+                    type: array
+                    description: User's wishlist items
+                    items:
+                      type: string
+                      description: ID of the product in the wishlist
+                  refreshToken:
+                    type: string
+                    description: Refresh token for authentication
+                  passwordChangedAt:
+                    type: string
+                    format: date-time
+                    description: Date and time when password was last changed
+                  passwordResetToken:
+                    type: string
+                    description: Token for password reset
+                  passwordResetExpires:
+                    type: string
+                    format: date-time
+                    description: Expiry date for password reset token
+                example:
+                  _id: 60db9bcb6f6a15435c6d5d15
+                  firstname: John
+                  lastname: Doe
+                  email: johndoe@example.com
+                  mobile: +1234567890
+                  role: user
+                  isBlocked: true
+                  cart: []
+                  address: "123 Updated Street, New City"
+                  wishlist: []
+                  refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  passwordChangedAt: 2024-07-03T12:00:00Z
+                  passwordResetToken: null
+                  passwordResetExpires: null
+        '404':
+          description: Not Found - This id is not valid or not Found
+        '500':
+          description: Internal Server Error - Something went wrong
+  /user/unblock-user/{userId}:
+    put:
+      summary: Unblock User. Requires admin login
+      description: API for managing user accounts in the e-commerce system
+      tags:
+        - Auth
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to unblock
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns a success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Confirmation message that the user is unblocked
+                example:
+                  message: User Unblocked
+        '404':
+          description: Not Found - This id is not valid or not Found
+        '500':
+          description: Internal Server Error - Something went wrong
+  /blogcategory/:
+    get:
+      summary: Get all categories
+      description: API for managing categories in the e-commerce system
+      tags:
+        - Blog categories
+      responses:
+        '200':
+          description: Successful operation - Returns an array of category objects
+          content:
+            application/json:
+              schema:
+                type: array
+                properties:
+                  _id:
+                    type: string
+                    description: The unique identifier of the product.
+                  title:
+                    type: string
+                    description: The title or name of the product.
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: The timestamp when the product was created.
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: The timestamp when the product was last updated.
+                  __v:
+                    type: integer
+                    description: Version number of the product document.
+                example:
+                  - _id: "6681498da39c4dbebbf849a5"
+                    title: "Shirt"
+                    createdAt: "2024-06-30T12:03:25.270Z"
+                    updatedAt: "2024-06-30T12:03:25.270Z"
+                    __v: 0
+                  - _id: "66814993a39c4dbebbf849a9"
+                    title: "Dress"
+                    createdAt: "2024-06-30T12:03:31.603Z"
+                    updatedAt: "2024-06-30T12:03:31.603Z"
+                    __v: 0
+        '500':
+          description: Internal Server Error - Something went wrong
+    post:
+      summary: Create a new category. Requires admin login
+      description: API for managing categories in the e-commerce system
+      tags:
+        - Blog categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  required: true
+                  example: Electronics
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns the newly created category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID of the newly created category
+                  title:
+                    type: string
+                    description: Title of the newly created category
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: The timestamp when the product was created.
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: The timestamp when the product was last updated.
+                  __v:
+                    type: integer
+                    description: Version number of the product document.
+                example:
+                  _id: 6681498da39c4dbebbf849a5
+                  title: Electronics
+                  createdAt: "2024-06-30T12:03:25.270Z"
+                  updatedAt: "2024-06-30T12:03:25.270Z"
+                  __v: 0
+        '400':
+          description: Bad Request - Invalid request body
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '500':
+          description: Internal Server Error - Something went wrong
+  /blogcategory/{id}:
+    get:
+      summary: Get a category by ID. Requires admin login
+      description: API for managing categories in the e-commerce system
+      tags:
+        - Blog categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the category to retrieve
+          schema:
+            type: string
+          example: 60ef35f77e076524fc30e4a1
+      responses:
+        '200':
+          description: Successful operation - Returns the category object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID of the category
+                  title:
+                    type: string
+                    description: Title of the category
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: The timestamp when the product was created.
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: The timestamp when the product was last updated.
+                  __v:
+                    type: integer
+                    description: Version number of the product document.
+                example:
+                  _id: "6681498da39c4dbebbf849a5"
+                  title: "Shirt"
+                  createdAt: "2024-06-30T12:03:25.270Z"
+                  updatedAt: "2024-06-30T12:03:25.270Z"
+                  __v: 0
+        '404':
+          description: Not Found - Category with given ID not found
+        '500':
+          description: Internal Server Error - Something went wrong
+    put:
+      summary: Update a category by ID. Requires admin login
+      description: API for managing categories in the e-commerce system
+      tags:
+        - Blog categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the category to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Updated Electronics
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns the updated category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID of the updated category
+                  title:
+                    type: string
+                    description: Title of the updated category
+                example:
+                  _id: 60ef35f77e076524fc30e4a1
+                  title: Updated Electronics
+                  createdAt: "2024-06-30T12:03:25.270Z"
+                  updatedAt: "2024-06-30T12:03:25.270Z"
+                  __v: 0
+        '400':
+          description: Bad Request - Invalid request body
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '404':
+          description: Not Found - This id is not valid or not Found
+        '500':
+          description: Internal Server Error - Something went wrong
+    delete:
+      summary: Delete a category by ID
+      description: API for managing categories in the e-commerce system
+      tags:
+        - Blog categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the category to delete
+          schema:
+            type: string
+          example: 60ef35f77e076524fc30e4a1
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns the deleted category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID of the deleted category
+                  title:
+                    type: string
+                    description: Title of the deleted category
+                example:
+                  _id: 60ef35f77e076524fc30e4a1
+                  title: Electronics
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '404':
+          description: Not Found - Category with given ID not found
+        '500':
+          description: Internal Server Error - Something went wrong
+  /blog/:
+    get:
+      summary: Get all Blogs
+      description: API for managing blogs
+      tags:
+        - Blog
+      responses:
+        '200':
+          description: Successful operation - Returns an array of blog objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Blog'
+        '500':
+          description: Internal Server Error - Something went wrong
+    post:
+      summary: Create a new blog. Requires admin login
+      description: API for managing blogs
+      tags:
+        - Blog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Blog'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns the created blog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '500':
+          description: Internal Server Error - Something went wrong
+  /blog/upload/{id}:
+    put:
+      summary: Upload images for a blog. Requires admin login
+      description: API for managing blogs and blog images
+      tags:
+        - Blog
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the blog to upload images for
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+              example:
+                images:
+                  - "https://example.com/image1.jpg"
+                  - "https://example.com/image2.jpg"
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation - Returns the updated blog with uploaded images
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '500':
+          description: Internal Server Error - Something went wrong
+  /blog/likes:
+    put:
+      summary: Like a Blog. Requires user login
+      description: API for managing blogs and interactions like liking 
+      tags:
+        - Blog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                blogId:
+                  type: string
+                  description: ID of the blog to like or unlike
+                  example: 60ef35f77e076524fc30e4a1
+      security:
+        - bearerAuth: []            
+      responses:
+        '200':
+          description: Successful operation - Returns the updated blog with likes/dislikes information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '500':
+          description: Internal Server Error - Something went wrong
+  /blog/dislikes:
+    put:
+      summary: Dislike a Blog. Requires admin login
+      description: API for managing blogs and interactions like liking and disliking
+      tags:
+        - Blog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                blogId:
+                  type: string
+                  description: ID of the blog to dislike or remove dislike
+                  example: 60ef35f77e076524fc30e4a1
+      security:
+        - bearerAuth: []    
+      responses:
+        '200':
+          description: Successful operation - Returns the updated blog with likes/dislikes information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '500':
+          description: Internal Server Error - Something went wrong
+  /blog/{id}:
+    get:
+      summary: Get a Blog by ID
+      description: API for managing blogs
+      tags:
+        - Blog
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the blog to retrieve
+      responses:
+        '200':
+          description: Successful operation - Returns the blog object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '404':
+          description: Blog not found - If the blog with the specified ID does not exist
+        '500':
+          description: Internal Server Error - Something went wrong
+    put:
+      summary: Update a Blog by ID. Requires admin login
+      description: API for managing blogs
+      tags:
+        - Blog
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the blog to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Updated title of the blog
+                  example: Updated Blog Title
+      security:
+        - bearerAuth: []  
+      responses:
+        '200':
+          description: Successful operation - Returns the updated blog object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '404':
+          description: Blog not found - If the blog with the specified ID does not exist
+        '500':
+          description: Internal Server Error - Something went wrong 
+    delete:
+      summary: Delete a Blog by ID. Requires admin login
+      description: API for managing blogs
+      tags:
+        - Blog
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the blog to delete
+      security:
+        - bearerAuth: []  
+      responses:
+        '200':
+          description: Successful operation - Returns the deleted blog object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '404':
+          description: Blog not found - If the blog with the specified ID does not exist
+        '500':
+          description: Internal Server Error - Something went wrong
+  /brand/:
+    get:
+      summary: Retrieve all brands
+      description: API for managing brands
+      tags:
+        - Brand
+      responses:
+        '200':
+          description: Successful operation - Returns an array of all brands
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Brand'
+        '500':
+          description: Internal Server Error - Something went wrong
+    post:
+      summary: Create a new brand. Requires admin login
+      description: API for managing brands
+      tags:
+        - Brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  description: Updated title of the brand
+                  example: Microsoft
+      security:
+        - bearerAuth: []  
+      responses:
+        '200':
+          description: Successful operation - Returns the created brand object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
+        '400':
+          description: Bad request - Invalid input, missing fields, etc.
+        '500':
+          description: Internal Server Error - Something went wrong
+  /brand/{id}:
+    get:
+      summary: Retrieve a single brand by ID
+      description: API for managing brands
+      tags:
+        - Brand
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the brand to retrieve
+      responses:
+        '200':
+          description: Successful operation - Returns a single brand object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
+        '404':
+          description: Brand not found - The requested brand ID does not exist
+        '500':
+          description: Internal Server Error - Something went wrong
+    put:
+      summary: Update a specific brand by ID. Requires admin login
+      description: API for managing brands
+      tags:
+        - Brand
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the brand to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Updated title of the brand
+                  example: Apple
+      security:
+        - bearerAuth: []  
+      responses:
+        '200':
+          description: Successful operation - Returns the updated brand.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
+        '404':
+          description: Brand not found - This id is not valid or not Found
+        '500':
+          description: Internal Server Error - Something went wrong.
+    delete:
+      summary: Delete a specific brand by ID. Requires admin login
+      description: API for managing brands
+      tags:
+        - Brand
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the brand to delete.
+      security:
+        - bearerAuth: []  
+      responses:
+        '200':
+          description: Successful operation - Returns the deleted brand.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
+        '404':
+          description: Brand not found - This id is not valid or not Found
+        '500':
+          description: Internal Server Error - Something went wrong.
+  /color/:
+    get:
+      summary: Get all colors
+      description: API for managing colors
+      tags:
+        - Color
+      responses:
+        '200':
+          description: Successful operation - Returns a list of all colors.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Color'
+        '500':
+          description: Internal Server Error - Something went wrong.
+    post:
+      summary: Create a new color. Requires admin login
+      description: API for managing colors
+      tags:
+        - Color
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  example: Red
+      security:
+        - bearerAuth: []  
+      responses:
+        '200':
+          description: Color created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Color'
+        '400':
+          description: Bad Request - Invalid input, missing fields, or invalid data.
+        '500':
+          description: Internal Server Error - Something went wrong.
+  /color/{id}:
+    get:
+      summary: Get a color by ID
+      description: API for managing colors
+      tags:
+        - Color
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the color to retrieve
+          schema:
+            type: string
+            example: 60ef35f77e076524fc30e4a1
+      responses:
+        '200':
+          description: Color retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Color'
+        '404':
+          description: Color not found
+        '500':
+          description: Internal Server Error - Something went wrong.
+    put:
+      summary: Update a color by ID. Requires admin login
+      description: API for managing colors
+      tags:
+        - Color
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the color to update
+          schema:
+            type: string
+            example: 60ef35f77e076524fc30e4a1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Updated title of the color
+                  example: Blue
+      security:
+        - bearerAuth: []  
+      responses:
+        '200':
+          description: Color updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Color'
+        '400':
+          description: Bad request - Invalid input data
+        '404':
+          description: Color not found
+        '500':
+          description: Internal Server Error - Something went wrong.
+    delete:
+      summary: Delete a color by ID. Requires admin login
+      description: API for managing colors
+      tags:
+        - Color
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the color to delete
+          schema:
+            type: string
+            example: 60ef35f77e076524fc30e4a1
+      security:
+        - bearerAuth: []  
+      responses:
+        '200':
+          description: Color deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Color'
+        '404':
+          description: Color not found
+        '500':
+          description: Internal Server Error - Something went wrong.
+  /coupon/:
+    get:
+      summary: Get all coupons. Requires admin login
+      description: API for managing coupons
+      tags:
+        - Coupon
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A list of coupons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Coupon'
+        '401':
+          description: Unauthorized - Missing or invalid authentication token
+        '500':
+          description: Internal Server Error - Something went wrong
+    post:
+      summary: Create a new coupon. Requires admin login
+      description: API for managing coupons
+      tags:
+        - Coupon
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+      responses:
+        '200':
+          description: Successfully created a new coupon
+          content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    example: SUMMER2024
+                  expiry:
+                    type: string
+                    format: date-time
+                    example: "2024-09-30T23:59:59.000Z"
+                  discount:
+                    type: number
+                    example: 10
+                  _id:
+                    type: string
+                    example: "669116216de2294fd9ee5628"
+                  __v:
+                    type: integer
+                    example: 0
+        '400':
+          description: Bad request - Invalid request body
+        '401':
+          description: Unauthorized - Missing or invalid authentication token
+        '500':
+          description: Internal Server Error - Something went wrong
+  /coupon/{id}:
+    get:
+      summary: Get coupon by ID. Requires admin login
+      description: API for managing coupons
+      tags:
+        - Coupon
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the coupon to retrieve
+          schema:
+            type: string
+          example: 60ef35f77e076524fc30e4a1
+      responses:
+        '200':
+          description: Successfully retrieved the coupon
+          content:
+            application/json:
+              schema:
+                schema:
+                properties:
+                  name:
+                    type: string
+                    example: SUMMER2024
+                  expiry:
+                    type: string
+                    format: date-time
+                    example: "2024-09-30T23:59:59.000Z"
+                  discount:
+                    type: number
+                    example: 10
+                  _id:
+                    type: string
+                    example: "669116216de2294fd9ee5628"
+                  __v:
+                    type: integer
+                    example: 0
+        '401':
+          description: Unauthorized - Missing or invalid authentication token
+        '404':
+          description: Not found - Coupon with the specified ID does not exist
+        '500':
+          description: Internal Server Error - Something went wrong
+    put:
+      summary: Update coupon by ID. Requires admin login
+      description: API for managing coupons
+      tags:
+        - Coupon
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the coupon to update
+          schema:
+            type: string
+          example: 60ef35f77e076524fc30e4a1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: SUMMER2024
+                expiry:
+                  type: string
+                  format: date-time
+                  example: "2024-09-30T23:59:59.000Z"
+                discount:
+                  type: number
+                  example: 10
+      responses:
+        '200':
+          description: Successfully retrieved the coupon
+          content:
+            application/json:
+              schema:
+                schema:
+                properties:
+                  name:
+                    type: string
+                    example: SUMMER2024
+                  expiry:
+                    type: string
+                    format: date-time
+                    example: "2024-09-30T23:59:59.000Z"
+                  discount:
+                    type: number
+                    example: 10
+                  _id:
+                    type: string
+                    example: "669116216de2294fd9ee5628"
+                  __v:
+                    type: integer
+                    example: 0         
+        '400':
+          description: Bad request - Invalid coupon ID
+        '401':
+          description: Unauthorized - Missing or invalid authentication token
+        '500':
+          description: Internal Server Error - Something went wrong
+    delete:
+      summary: Delete coupon by ID. Requires admin login
+      description: API for managing coupons
+      tags:
+        - Coupon
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the coupon to delete
+          schema:
+            type: string
+          example: 60ef35f77e076524fc30e4a1
+      responses:
+        '200':
+          description: Successfully deleted the coupon
+          content:
+            application/json:
+              schema:
+                schema:
+                properties:
+                  name:
+                    type: string
+                    example: SUMMER2024
+                  expiry:
+                    type: string
+                    format: date-time
+                    example: "2024-09-30T23:59:59.000Z"
+                  discount:
+                    type: number
+                    example: 10
+                  _id:
+                    type: string
+                    example: "669116216de2294fd9ee5628"
+                  __v:
+                    type: integer
+                    example: 0
+        '400':
+          description: Bad request - Invalid coupon ID
+        '500':
+          description: Internal Server Error - Something went wrong
+  /enquiry/:
+    get:
+      summary: Get all enquiries
+      description: API for managing enquiries
+      tags:
+        - Enquiry
+      responses:
+        '200':
+          description: A list of all enquiries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Enquiry'
+        '500':
+          description: Internal Server Error - Something went wrong
+    post:
+      summary: Create a new enquiry
+      description: API for managing enquiries
+      tags:
+        - Enquiry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Enquiry'
+      responses:
+        '200':
+          description: Successfully created an enquiry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enquiry'
+        '400':
+          description: Bad Request - Invalid input, missing fields, or incorrect data format
+        '500':
+          description: Internal Server Error - Something went wrong
+  /enquiry/{id}:
+    get:
+      summary: Get an enquiry by ID
+      description: API for managing enquiries
+      tags:
+        - Enquiry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the enquiry to retrieve
+      responses:
+        '200':
+          description: Successfully retrieved the enquiry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enquiry'
+        '404':
+          description: Enquiry not found
+        '500':
+          description: Internal Server Error - Something went wrong
+    put:
+      summary: Update an enquiry by ID. Requires admin login
+      description: API for managing enquiries
+      tags:
+        - Enquiry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the enquiry to update
+      security:
+        - bearerAuth: [] 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Enquiry'
+      responses:
+        '200':
+          description: Successfully updated the enquiry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enquiry'
+        '404':
+          description: Enquiry not found
+        '500':
+          description: Internal Server Error - Something went wrong
+    delete:
+      summary: Delete an enquiry by ID. Requires admin login
+      description: API for managing enquiries
+      tags:
+        - Enquiry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the enquiry to delete
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully deleted the enquiry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enquiry'
+        '404':
+          description: Enquiry not found
+        '500':
+          description: Internal Server Error - Something went wrong
+  /category:
+    get:
+      summary: Retrieve all categories
+      description: This API manages product categories within the application.
+      tags:
+        - Category
+      responses:
+        '200':
+          description: A list of all categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductCategory'
+        '500':
+          description: Internal Server Error - Something went wrong
+    post:
+      summary: Create a new category. Requires admin login
+      description: This API manages product categories within the application.
+      tags:
+        - Category
+      security:
+        - bearerAuth: [] 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              example:
+                title: Electronics
+      responses:
+        '200':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+        '400':
+          description: Bad Request - Invalid input data
+        '401':
+          description: Unauthorized - Invalid or expired token
+        '500':
+          description: Internal Server Error - Something went wrong
+  /category/{categoryId}:
+    get:
+      summary: Get a category by ID
+      description: This API manages product categories within the application.
+      tags:
+        - Category
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the category to get.
+      responses:
+        '200':
+          description: Category found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+        '404':
+          description: Category not found
+        '500':
+          description: Internal Server Error - Something went wrong
+    put:
+      summary: Update a category by ID. Requires admin login
+      description: This API manages product categories within the application.
+      tags:
+        - Category
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the category to update.
+      security:
+        - bearerAuth: [] 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              example:
+                title: Electronics
+      responses:
+        '200':
+          description: Updated category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+        '404':
+          description: Category not found
+        '500':
+          description: Internal Server Error - Something went wrong
+    delete:
+      summary: Delete a category by ID. Requires admin login
+      description: This API manages product categories within the application.
+      tags:
+        - Category
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the category to delete.
+      security:
+        - bearerAuth: []    
+      responses:
+        '200':
+          description: Deleted category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+        '404':
+          description: Category not found
+        '500':
+          description: Internal Server Error - Something went wrong
+  /product:
+    get:
+      summary: Get all products
+      description: This API manages products within the application.
+      tags:
+        - Product
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid request format or query parameter
+        '500':
+          description: Internal Server Error - Something went wrong
+    post:
+      summary: Create a new product. Requires admin login
+      description: This API manages products within the application.
+      tags:
+        - Product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      security:
+        - bearerAuth: [] 
+      responses:
+        '200':
+          description: Successfully created a new product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid request format or missing required fields
+        '500':
+          description: Internal Server Error - Something went wrong
+  /product/upload/{id}:
+    put:
+      summary: Upload images for a product. Requires admin login
+      description: This API manages products within the application.
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the product to update
+      security:
+        - bearerAuth: [] 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  example:
+                    - "https://example.com/image1.jpg"
+                    - "https://example.com/image2.jpg"
+      responses:
+        '200':
+          description: Successfully uploaded images and updated the product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid request format or missing required fields
+        '500':
+          description: Internal Server Error - Something went wrong
+  /product/wishlist:
+    put:
+      summary: Add or remove a product from the user's wishlist. Requires user login
+      description: This API manages products within the application.
+      tags:
+        - Product
+      security:
+        - bearerAuth: [] 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prodId:
+                  type: string
+                  example: 6682abec52353f475c32bbdc
+                  description: ID of the product to add or remove from the wishlist.
+              required:
+                - prodId
+      responses:
+        '200':
+          description: Successfully updated user's wishlist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid request format or missing required fields
+        '404':
+          description: Product or user not found
+        '500':
+          description: Internal Server Error - Something went wrong
+  /product/rating:
+    put:
+      summary: Rate a product. Requires user login
+      description: This API manages products within the application.
+      tags:
+        - Product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                star:
+                  type: integer
+                  example: 5
+                  description: Rating star given by the user (from 1 to 5).
+                prodId:
+                  type: string
+                  example: 669133986b1d6c50ca763b8c
+                  description: ID of the product being rated.
+                comment:
+                  type: string
+                  example: "Best product I've ever owned!"
+                  description: Optional comment or review text provided by the user.
+              required:
+                - star
+                - prodId
+      security:
+        - bearerAuth: [] 
+      responses:
+        '200':
+          description: Successfully updated product ratings and average rating
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid request format or missing required fields
+        '404':
+          description: Product not found
+        '500':
+          description: Internal Server Error - Something went wrong
+  /product/{id}:
+    get:
+      summary: Retrieve a product by ID
+      description: This API manages products within the application.
+      tags:
+        - Product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the product to retrieve
+      responses:
+        '200':
+          description: Successfully retrieved product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+        '500':
+          description: Internal Server Error - Something went wrong
+    put:
+      summary: Update a product by ID. Requires admin login
+      description: This API manages products within the application.
+      tags:
+        - Product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the product to update
+      security:
+        - bearerAuth: []  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Successfully updated product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad request - Invalid input data
+        '401':
+          description: Unauthorized - Missing or invalid token
+        '404':
+          description: Product not found
+        '500':
+          description: Internal Server Error - Something went wrong
+    delete:
+      summary: Delete a product by ID. Requires admin login
+      description: This API manages products within the application.
+      tags:
+        - Product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the product to delete
+      security:
+        - bearerAuth: []  
+      responses:
+        '200':
+          description: Successfully deleted product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad request - Invalid input data
+        '401':
+          description: Unauthorized - Missing or invalid token
+        '500':
+          description: Internal Server Error - Something went wrong
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    BlogCategory:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the blog category
+          example: Technology
+          required: true
+          unique: true
+      required:
+        - title
+      example:
+        title: Technology
+    Blog:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the blog
+          example: Introduction to Node.js
+          required: true
+        description:
+          type: string
+          description: A brief description of the blog content
+          example: This blog introduces the basics of Node.js programming.
+          required: true
+        category:
+          type: string
+          description: The category of the blog
+          example: Technology
+          required: true
+        numViews:
+          type: integer
+          description: The number of views for the blog
+          example: 100
+          default: 0
+        isLiked:
+          type: boolean
+          description: Indicates if the blog is liked
+          example: false
+          default: false
+        isDisliked:
+          type: boolean
+          description: Indicates if the blog is disliked
+          example: false
+          default: false
+        likes:
+          type: array
+          items:
+            type: string
+            format: uuid
+            description: Array of user IDs who liked the blog
+        dislikes:
+          type: array
+          items:
+            type: string
+            format: uuid
+            description: Array of user IDs who disliked the blog
+        author:
+          type: string
+          description: The author of the blog
+          example: John Doe
+          default: Admin
+        images:
+          type: array
+          items:
+            type: string
+            format: url
+            description: Array of URLs for images associated with the blog
+      required:
+        - title
+        - description
+        - category
+      example:
+        title: Introduction to Node.js
+        description: This blog introduces the basics of Node.js programming.
+        category: Technology
+        numViews: 100
+        isLiked: false
+        isDisliked: false
+        likes: []
+        dislikes: []
+        author: Admin
+        images: []
+    Brand:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the brand
+          example: Nike
+          required: true
+          unique: true
+      required:
+        - title
+      example:
+        _id: "6681498da39c4dbebbf849a5"
+        title: "Nike"
+        createdAt: "2024-06-30T12:03:25.270Z"
+        updatedAt: "2024-06-30T12:03:25.270Z"
+        __v: 0
+    Cart:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/Product'
+        cartTotal:
+          type: number
+          description: Total price of all products in the cart
+        totalAfterDiscount:
+          type: number
+          description: Total price after applying any discounts
+        orderby:
+          type: string
+          format: uuid
+          description: ID of the user who placed the order
+      required:
+        - products
+        - cartTotal
+        - orderby
+      example:
+        products:
+          - product: 5ffcb9f84c9c1044dcf65f2a
+            count: 2
+            color: Red
+            price: 50
+          - product: 5ffcb9f84c9c1044dcf65f2b
+            count: 1
+            color: Blue
+            price: 30
+        cartTotal: 130
+        totalAfterDiscount: 120
+        orderby: 5ffcb9f84c9c1044dcf65f2c
+    Color:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title or name of the color
+          example: Red
+          required: true
+          unique: true
+      required:
+        - title
+      example:
+        _id: "6681498da39c4dbebbf849a5"
+        title: Red
+        createdAt: "2024-06-30T12:03:25.270Z"
+        updatedAt: "2024-06-30T12:03:25.270Z"
+        __v: 0
+    Coupon:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the coupon
+          example: SUMMER2024
+          required: true
+          unique: true
+          uppercase: true
+        expiry:
+          type: string
+          format: date-time
+          description: The expiry date of the coupon
+          example: "2024-09-30T23:59:59Z"
+          required: true
+        discount:
+          type: number
+          format: float
+          description: The discount percentage or amount
+          example: 10
+          required: true
+      required:
+        - name
+        - expiry
+        - discount
+      example:
+        name: SUMMER2024
+        expiry: "2024-09-30T23:59:59Z"
+        discount: 10
+    Enquiry:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the person making the enquiry
+          example: John Doe
+          required: true
+        email:
+          type: string
+          format: email
+          description: The email address of the person making the enquiry
+          example: johndoe@example.com
+          required: true
+        mobile:
+          type: string
+          description: The mobile number of the person making the enquiry
+          example: "+1234567890"
+          required: true
+        comment:
+          type: string
+          description: The enquiry comment or message
+          example: Please provide more details about your services.
+          required: true
+        status:
+          type: string
+          description: The status of the enquiry
+          enum:
+            - Submitted
+            - Contacted
+            - In Progress
+            - Resolved
+          default: Submitted
+      required:
+        - name
+        - email
+        - mobile
+        - comment
+      example:
+        name: John Doe
+        email: johndoe@example.com
+        mobile: "+1234567890"
+        comment: Please provide more details about your services.
+        status: Submitted
+    Order:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                $ref: '#/components/schemas/Product'
+              count:
+                type: integer
+                description: Quantity of the product
+              color:
+                type: string
+                description: Color of the product
+        paymentIntent:
+          type: object
+          description: Payment information related to the order
+        orderStatus:
+          type: string
+          description: The current status of the order
+          enum:
+            - Not Processed
+            - Cash on Delivery
+            - Processing
+            - Dispatched
+            - Cancelled
+            - Delivered
+          default: Not Processed
+        orderby:
+          type: string
+          format: uuid
+          description: ID of the user who placed the order
+      required:
+        - products
+        - orderStatus
+        - orderby
+      example:
+        products:
+          - product: 5ffcb9f84c9c1044dcf65f2a
+            count: 2
+            color: Red
+          - product: 5ffcb9f84c9c1044dcf65f2b
+            count: 1
+            color: Blue
+            count: 1
+            color: Blue
+        orderStatus: Not Processed
+        orderby: 5ffcb9f84c9c1044dcf65f2c
+    ProductCategory:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title or name of the product category
+          example: Electronics
+          required: true
+          unique: true
+      required:
+        - title
+      example:
+        _id: "6681498da39c4dbebbf849a5"
+        title: Electronics
+        createdAt: "2024-06-30T12:03:25.270Z"
+        updatedAt: "2024-06-30T12:03:25.270Z"
+        __v: 0
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the product
+          example: Laptop
+          required: true
+        slug:
+          type: string
+          description: The slug of the product (unique identifier)
+          example: laptop-123
+          required: true
+          unique: true
+        description:
+          type: string
+          description: Description of the product
+          example: A powerful laptop for professional use
+          required: true
+        price:
+          type: number
+          format: float
+          description: Price of the product
+          example: 1200.50
+          required: true
+        category:
+          type: string
+          description: Category of the product
+          example: Electronics
+          required: true
+        brand:
+          type: string
+          description: Brand of the product
+          example: Apple
+          required: true
+        quantity:
+          type: integer
+          description: Quantity of the product available
+          example: 100
+          required: true
+        sold:
+          type: integer
+          description: Number of units sold
+          default: 0
+        images:
+          type: array
+          items:
+            type: object
+            properties:
+              public_id:
+                type: string
+                description: Public ID of the image (for cloud storage)
+              url:
+                type: string
+                format: url
+                description: URL of the image
+          description: Images associated with the product
+        color:
+          type: array
+          items:
+            type: string
+          description: Available colors for the product
+        tags:
+          type: string
+          description: Tags associated with the product
+        ratings:
+          type: array
+          items:
+            type: object
+            properties:
+              star:
+                type: number
+                description: Rating given by the user (1-5 stars)
+              comment:
+                type: string
+                description: Comment or review given by the user
+              postedby:
+                type: string
+                format: uuid
+                description: ID of the user who posted the rating
+          description: Ratings and reviews for the product
+        totalrating:
+          type: string
+          description: Total rating of the product (average or total sum)
+          default: "0"
+      required:
+        - title
+        - slug
+        - description
+        - price
+        - category
+        - brand
+        - quantity
+      example:
+        title: Laptop
+        slug: laptop-123
+        description: A powerful laptop for professional use
+        price: 1200.50
+        category: Electronics
+        brand: Apple
+        quantity: 100
+        images:
+          - https://example.com/images/laptop1.jpg
+          - https://example.com/images/laptop2.jpg
+        color: [ "Silver", "Space Gray" ]
+        tags: Professional, Laptop
+        ratings:
+          - star: 5
+            comment: Excellent laptop, very fast!
+            postedby: 5ffcb9f84c9c1044dcf65f2a
+        totalrating: "5"
+    User:
+      type: object
+      properties:
+        firstname:
+          type: string
+          description: The first name of the user
+          example: John
+          required: true
+        lastname:
+          type: string
+          description: The last name of the user
+          example: Doe
+          required: true
+        email:
+          type: string
+          format: email
+          description: The email address of the user
+          example: johndoe@example.com
+          required: true
+          unique: true
+        mobile:
+          type: string
+          description: The mobile number of the user
+          example: "+1234567890"
+          required: true
+          unique: true
+        password:
+          type: string
+          format: password
+          description: The password of the user
+          example: "password123"
+          required: true
+        role:
+          type: string
+          description: The role of the user
+          enum:
+            - user
+            - admin
+          default: user
+        isBlocked:
+          type: boolean
+          description: Indicates if the user is blocked
+          default: false
+        cart:
+          type: array
+          items:
+            type: object
+            description: Array containing items in the user's cart
+          default: []
+        address:
+          type: string
+          description: The address of the user
+        wishlist:
+          type: array
+          items:
+            type: string
+            format: uuid
+            description: Array of IDs referencing products in the user's wishlist
+            example: 5ffcb9f84c9c1044dcf65f2a
+        refreshToken:
+          type: string
+          description: Token used for refreshing authentication tokens
+        passwordChangedAt:
+          type: string
+          format: date-time
+          description: Date and time when the password was last changed
+        passwordResetToken:
+          type: string
+          description: Token used for resetting the password
+        passwordResetExpires:
+          type: string
+          format: date-time
+          description: Expiry date and time of the password reset token
+      required:
+        - firstname
+        - lastname
+        - email
+        - mobile
+        - password
+      example:
+        firstname: John
+        lastname: Doe
+        email: johndoe@example.com
+        mobile: "+1234567890"
+        password: "password123"
+        role: user
+        isBlocked: false
+        cart: []
+        address: "123 Main St, Anytown, USA"
+        wishlist: []
+
+
